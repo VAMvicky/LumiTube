@@ -144,6 +144,7 @@ Keduanya bisa dipasang bersamaan dan berjalan sendiri-sendiri. Kamu juga bisa me
 - 🔗 Buka link YouTube / YouTube Music langsung di Lumi
 - 🛡️ **Laporan crash** bawaan dengan tombol *"Salin laporan"*
 - 🔒 Video dan Shorts **khusus anggota** tidak tampil di Beranda
+- 📱 Putar Shorts dari channel lalu geser untuk menonton semua Shorts channel itu
 - 🧹 Hapus histori tontonan dan histori penelusuran di Lumi, ikut terhapus di YouTube dan YouTube Music asli
 - ♾️ YT Music Lumi: lagu terus berlanjut setelah lagu terakhir daftar, **Putar semua** di Pilihan cepat dan Lagu teratas artis (geser kanan-kiri), tarik Beranda untuk refresh, tekan lama untuk menu, dan **Histori** di tab Anda
 - 🌗 Tema **terang/gelap** (bawaan: YouTube Lumi terang, YT Music Lumi gelap) dan **warna biru Lumi** (aktif secara bawaan, bisa dimatikan)
@@ -158,8 +159,8 @@ Keduanya bisa dipasang bersamaan dan berjalan sendiri-sendiri. Kamu juga bisa me
 
 1. Buka halaman **[Releases](https://github.com/vickyvam72/LumiTube/releases/latest)**.
 2. Di bagian **Assets**, unduh salah satu atau kedua aplikasi:
-   - `YouTubeLumi-v2.2.apk` untuk YouTube
-   - `YTMusicLumi-v2.2.apk` untuk YouTube Music
+   - `YouTubeLumi-v2.3.apk` untuk YouTube
+   - `YTMusicLumi-v2.3.apk` untuk YouTube Music
 3. Buka file yang sudah diunduh. Kalau Android meminta, izinkan **"Instal aplikasi tidak dikenal"** untuk browser atau pengelola file yang kamu pakai.
 4. Tekan **Instal**. Selesai! 🎉
 

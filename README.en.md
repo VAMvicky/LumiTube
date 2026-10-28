@@ -144,6 +144,7 @@ Both apps can be installed side by side and work independently. You can also sen
 - 🔗 Open YouTube / YouTube Music links directly in Lumi
 - 🛡️ A built-in **crash reporter** with a one-tap *"Copy report"* button
 - 🔒 **Members-only** videos and Shorts are hidden from Home
+- 📱 Play a Short from a channel and swipe through all of that channel's Shorts
 - 🧹 Remove watch history and search history in Lumi, and it is removed from the official YouTube and YouTube Music too
 - ♾️ YT Music Lumi: playback keeps going after the last song in a list, **Play all** on Quick picks and an artist's Top songs (swipe left/right), pull Home to refresh, long-press for a menu, and **History** in the You tab
 - 🌗 **Light/dark** themes (default: YouTube Lumi light, YT Music Lumi dark) and **Lumi blue colors** (on by default, can be turned off)
@@ -158,8 +159,8 @@ Both apps can be installed side by side and work independently. You can also sen
 
 1. Go to the **[Releases](https://github.com/vickyvam72/LumiTube/releases/latest)** page.
 2. Under **Assets**, download one or both apps:
-   - `YouTubeLumi-v2.2.apk` for YouTube
-   - `YTMusicLumi-v2.2.apk` for YouTube Music
+   - `YouTubeLumi-v2.3.apk` for YouTube
+   - `YTMusicLumi-v2.3.apk` for YouTube Music
 3. Open the downloaded file. If Android asks, allow **"Install unknown apps"** for your browser or file manager.
 4. Tap **Install**. Done! 🎉
 

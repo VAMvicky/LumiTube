@@ -150,6 +150,7 @@ fun MusicApp(
     val stack = remember { mutableStateListOf<MRoute>() }
     var tab by rememberSaveable { mutableIntStateOf(0) }
     var homeTop by remember { mutableIntStateOf(0) }
+    val homeListState = rememberLazyListState()
     var showPlayer by rememberSaveable { mutableStateOf(false) }
     var showSettings by remember { mutableStateOf(false) }
 
@@ -238,7 +239,7 @@ fun MusicApp(
                     MRoute.Search -> MusicSearchScreen(onItem) { stack.removeAt(stack.lastIndex) }
                     MRoute.History -> MusicHistoryScreen(onItem, onLogin) { stack.removeAt(stack.lastIndex) }
                     null -> when (tab) {
-                        0 -> MusicHome(home, homeChips, chipIndex, { i -> chipIndex = if (chipIndex == i) -1 else i }, onHomeItem, openBrowse, onSwitchVideo, onLogin, onOffline = { stack.add(MRoute.Downloads) }, onSearch = { MusicSearchState.reset(); stack.add(MRoute.Search) }, scrollToTop = homeTop) { showSettings = true }
+                        0 -> MusicHome(home, homeChips, chipIndex, { i -> chipIndex = if (chipIndex == i) -1 else i }, onHomeItem, openBrowse, onSwitchVideo, onLogin, onOffline = { stack.add(MRoute.Downloads) }, onSearch = { MusicSearchState.reset(); stack.add(MRoute.Search) }, scrollToTop = homeTop, state = homeListState) { showSettings = true }
                         1 -> ExploreScreen(onItem, openBrowse)
                         2 -> LibraryScreen(onItem, onLogin, onOpenVideo)
                         else -> MusicYouTab(
@@ -355,9 +356,10 @@ private fun MusicHome(
     onOffline: () -> Unit,
     onSearch: () -> Unit,
     scrollToTop: Int = 0,
+    /** Posisi gulir Beranda disimpan di luar layar: kembali dari halaman lain = tetap di posisi tadi. */
+    state: androidx.compose.foundation.lazy.LazyListState,
     onSettings: () -> Unit,
 ) {
-    val state = rememberLazyListState()
     // Ketuk "Beranda" saat sudah di Beranda = langsung kembali ke paling atas.
     var handledTop by remember { mutableIntStateOf(scrollToTop) }
     LaunchedEffect(scrollToTop) {

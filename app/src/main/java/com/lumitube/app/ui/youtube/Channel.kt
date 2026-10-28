@@ -103,7 +103,10 @@ private sealed interface ChRow {
  * (Beranda, Video, Shorts, Rilis, Playlist, Postingan).
  */
 @Composable
-fun ChannelScreen(channelId: String, onBack: () -> Unit, open: (Item) -> Unit, onLogin: () -> Unit) {
+fun ChannelScreen(
+    channelId: String, onBack: () -> Unit, open: (Item) -> Unit, onLogin: () -> Unit,
+    openShorts: ((List<Item>, Int, (suspend () -> List<Item>)?) -> Unit)? = null,
+) {
     val yt = LocalYt.current
     val ctx = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -226,6 +229,24 @@ fun ChannelScreen(channelId: String, onBack: () -> Unit, open: (Item) -> Unit, o
         }
         flush()
         out
+    }
+
+    // Putar Shorts channel: geser atas/bawah ke Shorts berikutnya di channel ini (semuanya,
+    // halaman berikutnya dimuat saat mendekati akhir), bukan hanya satu Short.
+    fun playShort(s: Item) {
+        val list = items.filter { it.type == ItemType.SHORT }.distinctBy { it.id }
+        val idx = list.indexOfFirst { it.id == s.id }
+        if (openShorts == null || idx < 0) { open(s); return }
+        var token = if (isShortsTab) continuation else null
+        val more: (suspend () -> List<Item>)? = if (token == null) null else ({
+            val t = token
+            if (t == null) emptyList() else {
+                val p = ChannelRepo.more(t)
+                token = p.continuation?.takeIf { it != t }
+                p.items.filter { it.type == ItemType.SHORT }
+            }
+        })
+        openShorts(list, idx, more)
     }
 
     val state = rememberLazyListState()
@@ -385,12 +406,12 @@ fun ChannelScreen(channelId: String, onBack: () -> Unit, open: (Item) -> Unit, o
             items(rows.size) { i ->
                 when (val r = rows[i]) {
                     is ChRow.Post -> PostCard(r.post) { imgs, i -> viewer = imgs to i }
-                    is ChRow.Shorts -> ShortsShelf(r.items) { open(it) }
+                    is ChRow.Shorts -> ShortsShelf(r.items) { playShort(it) }
                     is ChRow.Grid -> Row(
                         Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 4.dp),
                         horizontalArrangement = Arrangement.spacedBy(6.dp),
                     ) {
-                        r.items.forEach { s -> ShortCard(s, Modifier.weight(1f)) { open(s) } }
+                        r.items.forEach { s -> ShortCard(s, Modifier.weight(1f)) { playShort(s) } }
                         repeat(3 - r.items.size) { Spacer(Modifier.weight(1f)) }
                     }
                     is ChRow.One -> when (r.item.type) {

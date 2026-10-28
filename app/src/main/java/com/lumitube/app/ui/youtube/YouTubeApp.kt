@@ -137,7 +137,8 @@ sealed interface YtRoute {
     data class Watch(val item: Item) : YtRoute
     data class Browse(val id: String, val title: String?) : YtRoute
     data object Search : YtRoute
-    data class Shorts(val items: List<Item>, val index: Int) : YtRoute
+    /** [more] = muat Shorts berikutnya (mis. semua Shorts sebuah channel). */
+    data class Shorts(val items: List<Item>, val index: Int, val more: (suspend () -> List<Item>)? = null) : YtRoute
     data object Downloads : YtRoute
     data object Settings : YtRoute
 }
@@ -169,9 +170,24 @@ fun YouTubeApp(
         onDispose { com.lumitube.app.player.Together.onOpen = null }
     }
 
-    val openShorts: (List<Item>, Int) -> Unit = { list, idx ->
+    // Video yang sedang ditonton sebelum membuka Shorts: dilanjutkan lagi saat kembali.
+    var beforeShorts by remember { mutableStateOf<PlaybackManager.Snapshot?>(null) }
+    val openShortsMore: (List<Item>, Int, (suspend () -> List<Item>)?) -> Unit = { list, idx, more ->
+        if (stack.none { it is YtRoute.Shorts }) beforeShorts = if (stack.any { it is YtRoute.Watch }) PlaybackManager.snapshot() else null
         stack.removeAll { it is YtRoute.Shorts }
-        stack.add(YtRoute.Shorts(list, idx.coerceAtLeast(0)))
+        stack.add(YtRoute.Shorts(list, idx.coerceAtLeast(0), more))
+    }
+    val openShorts: (List<Item>, Int) -> Unit = { list, idx -> openShortsMore(list, idx, null) }
+    /** Kembali satu layar; keluar dari Shorts ke halaman tonton = videonya diputar lagi dari posisi tadi. */
+    fun pop() {
+        if (stack.isEmpty()) { tab = 0; return }
+        val removed = stack.removeAt(stack.lastIndex)
+        if (removed is YtRoute.Shorts) {
+            val snap = beforeShorts
+            beforeShorts = null
+            val top = stack.lastOrNull()
+            if (snap != null && top is YtRoute.Watch) PlaybackManager.restore(snap)
+        }
     }
     val open: (Item) -> Unit = { item ->
         when {
@@ -196,9 +212,7 @@ fun YouTubeApp(
         }
     }
 
-    BackHandler(enabled = stack.isNotEmpty() || tab != 0) {
-        if (stack.isNotEmpty()) stack.removeAt(stack.lastIndex) else tab = 0
-    }
+    BackHandler(enabled = stack.isNotEmpty() || tab != 0) { pop() }
 
     val loggedIn = Session.loggedIn
     val home = rememberFeed(key = "home$loggedIn", more = { Repo.ytHomeMore(it) }, peek = { Repo.ytHomeCached() }) { Repo.ytHome() }
@@ -253,16 +267,39 @@ fun YouTubeApp(
         Box(Modifier.weight(1f).fillMaxWidth().statusBarsPadding()) {
             when (top) {
                 is YtRoute.Browse -> if (top.id.startsWith("UC")) {
-                    ChannelScreen(top.id, { stack.removeAt(stack.lastIndex) }, open, onLogin)
+                    ChannelScreen(top.id, { stack.removeAt(stack.lastIndex) }, open, onLogin, openShortsMore)
                 } else {
                     BrowseScreen(top.id, top.title, { stack.removeAt(stack.lastIndex) }, open)
                 }
                 YtRoute.Search -> SearchScreen({ stack.removeAt(stack.lastIndex) }, open, openChannel, onLogin, openShorts)
-                is YtRoute.Shorts -> ShortsPlayer(
-                    items = top.items, startIndex = top.index, onLoadMore = null,
-                    onChannel = openChannel, onLogin = onLogin,
-                    onBack = { stack.removeAt(stack.lastIndex) },
-                )
+                is YtRoute.Shorts -> {
+                    // Daftar bisa bertambah (Shorts channel berikutnya dimuat saat mendekati akhir).
+                    val list = remember(top) { androidx.compose.runtime.mutableStateListOf<Item>().apply { addAll(top.items) } }
+                    val moreScope = rememberCoroutineScope()
+                    var loadingMore by remember(top) { mutableStateOf(false) }
+                    var ended by remember(top) { mutableStateOf(false) }
+                    ShortsPlayer(
+                        items = list, startIndex = top.index,
+                        onLoadMore = top.more?.let { m ->
+                            {
+                                if (!loadingMore && !ended) {
+                                    loadingMore = true
+                                    moreScope.launch {
+                                        try {
+                                            val add = m().filter { a -> list.none { it.id == a.id } }
+                                            if (add.isEmpty()) ended = true else list.addAll(add)
+                                        } catch (e: Exception) {
+                                            if (e is kotlinx.coroutines.CancellationException) throw e
+                                        }
+                                        loadingMore = false
+                                    }
+                                }
+                            }
+                        },
+                        onChannel = openChannel, onLogin = onLogin,
+                        onBack = { pop() },
+                    )
+                }
                 YtRoute.Settings -> YtSettingsPage { stack.removeAt(stack.lastIndex) }
                 YtRoute.Downloads -> DownloadsScreen(
                     { stack.removeAt(stack.lastIndex) },

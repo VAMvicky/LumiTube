@@ -740,6 +740,28 @@ object PlaybackManager {
         queue.addAll(rest)
     }
 
+    /** Keadaan pemutaran video (antrean + posisi), untuk dilanjutkan setelah menonton Shorts. */
+    data class Snapshot(val queue: List<Item>, val index: Int, val isVideo: Boolean, val playlistQueue: Boolean, val position: Long, val related: Item?)
+
+    fun snapshot(): Snapshot? {
+        val cur = current ?: return null
+        if (cur.type == ItemType.SHORT || index !in queue.indices) return null
+        return Snapshot(queue.toList(), index, isVideo, playlistQueue, exo.currentPosition.coerceAtLeast(0), relatedNext)
+    }
+
+    /** Lanjutkan video yang tadi diputar, dari posisi terakhir. */
+    fun restore(s: Snapshot) {
+        if (s.queue.isEmpty()) return
+        queueJob?.cancel()
+        queue.clear()
+        queue.addAll(s.queue)
+        index = s.index.coerceIn(0, queue.size - 1)
+        isVideo = s.isVideo
+        playlistQueue = s.playlistQueue
+        relatedNext = s.related
+        load(queue[index], s.position)
+    }
+
     fun stop() {
         loadJob?.cancel()
         queueJob?.cancel()
