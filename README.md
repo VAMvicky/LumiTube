@@ -6,7 +6,7 @@
 
 *Dua aplikasi · satu kode · sekitar 3 MB per aplikasi · tanpa iklan*
 
-[![Rilis](https://img.shields.io/github/v/release/vickyvam72/LumiTube?label=rilis&color=e53935&style=for-the-badge)](https://github.com/vickyvam72/LumiTube/releases/latest)
+[![Rilis](https://img.shields.io/github/v/release/VAMvicky/LumiTube?label=rilis&color=e53935&style=for-the-badge)](https://github.com/VAMvicky/LumiTube/releases/latest)
 [![Android](https://img.shields.io/badge/Android-7.0%2B-3DDC84?style=for-the-badge&logo=android&logoColor=white)](#-kebutuhan-sistem)
 [![Kotlin](https://img.shields.io/badge/Kotlin-Jetpack%20Compose-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white)](#%EF%B8%8F-teknologi)
 [![Lisensi](https://img.shields.io/badge/lisensi-GPL--3.0-blue?style=for-the-badge)](LICENSE)
@@ -157,7 +157,7 @@ Keduanya bisa dipasang bersamaan dan berjalan sendiri-sendiri. Kamu juga bisa me
 
 ## ⬇️ Unduh & Pasang
 
-1. Buka halaman **[Releases](https://github.com/vickyvam72/LumiTube/releases/latest)**.
+1. Buka halaman **[Releases](https://github.com/VAMvicky/LumiTube/releases/latest)**.
 2. Di bagian **Assets**, unduh salah satu atau kedua aplikasi:
    - `YouTubeLumi-v2.3.apk` untuk YouTube
    - `YTMusicLumi-v2.3.apk` untuk YouTube Music
@@ -317,7 +317,7 @@ Kedua aplikasi berasal dari satu modul dengan dua product flavor:
 | `music` | YT Music Lumi |
 
 ```bash
-git clone https://github.com/vickyvam72/LumiTube.git
+git clone https://github.com/VAMvicky/LumiTube.git
 cd LumiTube
 gradle :app:assembleYoutubeRelease :app:assembleMusicRelease   # Gradle 8.11.1, JDK 17
 ```
@@ -364,7 +364,7 @@ LumiTube memakai endpoint YouTube yang dapat diakses publik, yang bisa berubah s
 
 ## 📄 Lisensi
 
-Hak cipta © 2026 **vickyvam72**.
+Hak cipta © 2026 **VAMvicky**.
 
 LumiTube adalah perangkat lunak bebas dan open source, dirilis di bawah **[GNU General Public License v3.0](LICENSE)**.
 Kamu boleh memakai, mempelajari, mengubah, dan membagikan ulang LumiTube, dengan syarat versi turunannya juga dirilis dengan lisensi yang sama (GPL-3.0) dan kode sumbernya tetap terbuka.

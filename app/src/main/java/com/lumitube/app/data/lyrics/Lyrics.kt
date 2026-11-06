@@ -281,7 +281,7 @@ interface LyricsProvider {
 
 private fun httpGet(url: String, headers: Map<String, String> = emptyMap()): String? {
     val req = Request.Builder().url(url)
-        .header("User-Agent", "LumiTube/1.1 (https://github.com/vickyvam72/lumitube)")
+        .header("User-Agent", "LumiTube/1.1 (https://github.com/VAMvicky/LumiTube)")
         .apply { headers.forEach { (k, v) -> header(k, v) } }
         .build()
     return InnerTube.http.newCall(req).execute().use { r ->

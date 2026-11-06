@@ -6,7 +6,7 @@
 
 *Two apps · one codebase · about 3 MB each · no ads*
 
-[![Release](https://img.shields.io/github/v/release/vickyvam72/LumiTube?label=release&color=e53935&style=for-the-badge)](https://github.com/vickyvam72/LumiTube/releases/latest)
+[![Release](https://img.shields.io/github/v/release/VAMvicky/LumiTube?label=release&color=e53935&style=for-the-badge)](https://github.com/VAMvicky/LumiTube/releases/latest)
 [![Android](https://img.shields.io/badge/Android-7.0%2B-3DDC84?style=for-the-badge&logo=android&logoColor=white)](#-requirements)
 [![Kotlin](https://img.shields.io/badge/Kotlin-Jetpack%20Compose-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white)](#%EF%B8%8F-tech-stack)
 [![License](https://img.shields.io/badge/license-GPL--3.0-blue?style=for-the-badge)](LICENSE)
@@ -157,7 +157,7 @@ Both apps can be installed side by side and work independently. You can also sen
 
 ## ⬇️ Download & Install
 
-1. Go to the **[Releases](https://github.com/vickyvam72/LumiTube/releases/latest)** page.
+1. Go to the **[Releases](https://github.com/VAMvicky/LumiTube/releases/latest)** page.
 2. Under **Assets**, download one or both apps:
    - `YouTubeLumi-v2.3.apk` for YouTube
    - `YTMusicLumi-v2.3.apk` for YouTube Music
@@ -319,7 +319,7 @@ Both apps come from a single module, using two product flavors:
 | `music` | YT Music Lumi |
 
 ```bash
-git clone https://github.com/vickyvam72/LumiTube.git
+git clone https://github.com/VAMvicky/LumiTube.git
 cd LumiTube
 gradle :app:assembleYoutubeRelease :app:assembleMusicRelease   # Gradle 8.11.1, JDK 17
 ```
@@ -366,7 +366,7 @@ LumiTube relies on publicly accessible YouTube endpoints, which may change at an
 
 ## 📄 License
 
-Copyright © 2026 **vickyvam72**.
+Copyright © 2026 **VAMvicky**.
 
 LumiTube is free and open-source software, released under the **[GNU General Public License v3.0](LICENSE)**.
 You may use, study, modify and redistribute LumiTube, as long as derivative works are also released under the same license (GPL-3.0) with their source code available.
